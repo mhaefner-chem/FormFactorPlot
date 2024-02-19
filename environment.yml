@@ -1,0 +1,5 @@
+name: FFP
+dependencies:
+- numpy
+- matplotlib
+- python=3.10

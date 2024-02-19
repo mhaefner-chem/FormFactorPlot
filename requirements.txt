@@ -1,0 +1,3 @@
+# Following packages are required to run FormFactorPlot.py:
+matplotlib
+numpy

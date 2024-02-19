@@ -418,7 +418,7 @@ SOFTWARE.
         #contains the listbox"
         def frame_listbox():
 			#"Contains the listbox"
-            self._frame = tk.Frame(self.root, bg="gold")
+            self._frame = tk.Frame(self.root, bg="white")
             self._frame.pack(expand=True, fill=tk.BOTH) # adapt the frame to the window
             
         def label_listbox():
@@ -479,13 +479,13 @@ SOFTWARE.
             def items_selected():
                 # get all selected indices
                 selected_indices = self._lbx.curselection()
-                print(selected_indices)
+                # print(selected_indices)
                 # get selected items
                 choice = []
                 for i in selected_indices:
                     selected_option = self._lbx.get(i)
-                    print(f'You selected: {selected_option}')
-                    print(self.data.data[int(selected_option.split()[0])])
+                    # print(f'You selected: {selected_option}')
+                    # print(self.data.data[int(selected_option.split()[0])])
                     choice.append(int(selected_option.split()[0]))
                 plot = plot_window(choice,self.data)
         
