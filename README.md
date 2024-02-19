@@ -1,10 +1,11 @@
 # FormFactorPlot
 
-![GitHub Release](https://img.shields.io/github/v/release/mhaefner-chem/FormFactorPlot?include_prereleases)
+![GitHub Release](https://img.shields.io/github/v/release/mhaefner-chem/FormFactorPlot?include_prereleases) ![GitHub License](https://img.shields.io/github/license/mhaefner-chem/FormFactorPlot)
+
 ## Table of contents
 
-
+- [About 
  Plots XRD Form Factors.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzE2MTc1MjY0LC05ODI4MjI4NzNdfQ==
+eyJoaXN0b3J5IjpbMTkzMzE4MTAzLC05ODI4MjI4NzNdfQ==
 -->
