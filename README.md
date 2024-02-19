@@ -11,11 +11,14 @@
 ## About FormFactorPlot
  Plots XRD Form Factors.
 
+## Installation
+tbd
+
 ## License
-FormFactorPlot is published and 
+FormFactorPlot is published and distributed under the [MIT License](LICENSE).
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODIzNDA1MjY1LC01MTk0NjA1OTgsLTk4Mj
-gyMjg3M119
+eyJoaXN0b3J5IjpbMTc3MzE0MTE1MiwtNTE5NDYwNTk4LC05OD
+I4MjI4NzNdfQ==
 -->
