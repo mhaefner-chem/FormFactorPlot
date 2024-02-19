@@ -4,11 +4,13 @@
 
 ## Table of contents
 
-- [About FormFactorPlot] (#about-formfactorplot)
--
+- [About FormFactorPlot](ABout)
+- [License](#license)
 
 ## About FormFactorPlot
  Plots XRD Form Factors.
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUxOTQ2MDU5OCwtOTgyODIyODczXX0=
+eyJoaXN0b3J5IjpbMTQ5MzQyMTc1NiwtNTE5NDYwNTk4LC05OD
+I4MjI4NzNdfQ==
 -->
