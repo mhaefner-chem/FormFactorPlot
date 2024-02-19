@@ -2,7 +2,7 @@
 """
 Created on Mon Feb 12 19:25:17 2024
 
-Copyright (C) 2024, Michael Häfner
+Copyright (c) 2024, Michael Häfner
 Full copyright note in LICENSE
 
 """
@@ -245,21 +245,14 @@ class search_window:
             about.config(bg='#AAAAAA')
             
             message ='''FormFactorPlot allows the plotting of provided atomic XRD form factors.
-Copyright (C) 2024 Michael Häfner
+
+MIT License
+Copyright (c) 2024 mhaefner-chem
 Contact: michael.haefner@uni-bayreuth.de
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 '''
 
