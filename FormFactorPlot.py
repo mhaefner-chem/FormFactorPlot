@@ -5,6 +5,10 @@ Created on Mon Feb 12 19:25:17 2024
 Copyright (c) 2024, Michael Häfner
 Full copyright note in LICENSE
 
+to-do: 
+    filter for element OR number Z
+    create csv from provided files
+
 """
 
 import tkinter as tk
@@ -141,7 +145,7 @@ class data:
         for i in range(len(self.data)):
             tmp = []
             # print(round((self.set_list[i]-1)/2)-1,self.set_list[i])
-            for j in range(1,round((self.set_list[i]-1)/2)-1):
+            for j in range(1,round((self.set_list[i]-1)/2)+1):
                 a_j = self.data[i][self.labels.index("a"+str(j))]
                 try:
                     tmp.append(float(a_j))
@@ -153,7 +157,7 @@ class data:
         self.b_list = [0] * len(self.data)
         for i in range(len(self.data)):
             tmp = []
-            for j in range(1,round((self.set_list[i]-1)/2)-1):
+            for j in range(1,round((self.set_list[i]-1)/2)+1):
                 b_j = self.data[i][self.labels.index("b"+str(j))]
                 try:
                     tmp.append(float(b_j))
@@ -178,9 +182,10 @@ class search_window:
     # initializes the class based on the csv
     def __init__(self):
         
-        self.root = create_window("350x50+120+120", "Atomic Form Factor Selector")
+        self.root = create_window("350x400+120+120", "Atomic Form Factor Selector")
             
         self.frame_selection_buttons()
+        self.frame_about_button()
         self.open_button()
         self.root.mainloop()
         
@@ -190,50 +195,15 @@ class search_window:
         self._frame_buttons.pack(side=tk.TOP,fill=tk.X)
         sep = ttk.Separator(self._frame_buttons,orient='horizontal')
         sep.pack(side=tk.BOTTOM,fill=tk.X)
-        
-    def open_button(self):
     
-        open_button = ttk.Button(
-            self._frame_buttons,
-            text='Open CSV',
-            command = lambda: select_file()
-        )
-        open_button.pack(side=tk.LEFT,expand=True)
+    def frame_about_button(self):
+        self._frame_about = tk.Frame(self.root)
+        self._frame_about.pack(side=tk.BOTTOM,fill=tk.X)
+        sep = ttk.Separator(self._frame_about,orient='horizontal')
+        sep.pack(side=tk.TOP,fill=tk.X)
         
-        def select_file():
-            
-            filetypes = (
-                ('csv files', '*.csv'),
-                ('All files', '*.*')
-            )
-            
-            filename = fd.askopenfilename(
-                title='Open CSV',
-                initialdir='./',
-                filetypes=filetypes)
-            if os.path.isfile(filename) == True:
-                self.build_rest(filename)
-            else:
-                messagebox.showerror("Error in input file!", "Input file could not be found!")
-                
-        make_button = ttk.Button(
-            self._frame_buttons,
-            text='Make Example CSV',
-            command = lambda: save_file()
-        )
-    
-        make_button.pack(side=tk.LEFT,expand=True)
-        
-        def save_file():
-            Files = [('CSV File', '*.csv'),
-                ('All Files', '*.*')]
-            savefile = fd.asksaveasfile(filetypes = Files, defaultextension = Files)
-            with savefile as f:
-                f.write("source,set-type,element,ox.,a1,b1,a2,b2,a3,b3,a4,b4,a5,b5,c,comment\n")
-                f.write("ITC,9,H,0,0.489918,20.6593,0.262003,7.74039,0.196767,49.5519,0.049879,2.20159,,,0.001305,This is an example\n")
-    
         about_button = ttk.Button(
-            self._frame_buttons,
+            self._frame_about,
             text='About',
             command = lambda: about()
         )
@@ -245,7 +215,7 @@ class search_window:
             about.config(bg='#AAAAAA')
             
             message ='''FormFactorPlot allows the plotting of provided atomic XRD form factors.
-Version 1.0.1
+Version 0.9.3
 
 MIT License
 Copyright (c) 2024 mhaefner-chem
@@ -272,16 +242,64 @@ SOFTWARE.
 
             
             text_box = tk.Text(
-                about
+                about,
+                wrap = "word"
             )
             text_box.pack(expand=True,fill=tk.X)
             text_box.insert('end', message)
             text_box.config(state='disabled')
+        
+    def open_button(self):
+    
+        open_button = ttk.Button(
+            self._frame_buttons,
+            text='Open Database',
+            command = lambda: select_file()
+        )
+        open_button.pack(side=tk.LEFT,expand=True)
+        
+        def select_file():
+            
+            filetypes = (
+                ('csv files', '*.csv'),
+                ('All files', '*.*')
+            )
+            
+            filename = fd.askopenfilename(
+                title='Open CSV',
+                initialdir='./',
+                filetypes=filetypes)
+            if os.path.isfile(filename) == True:
+                self.build_rest(filename)
+            else:
+                messagebox.showerror("Error in input file!", "Input file could not be found!")
+                
+        make_button = ttk.Button(
+            self._frame_buttons,
+            text='Make Example Database',
+            command = lambda: save_file()
+        )
+    
+        make_button.pack(side=tk.LEFT,expand=True)
+
+        
+        def save_file():
+            Files = [('CSV File', '*.csv'),
+                ('All Files', '*.*')]
+            savefile = fd.asksaveasfile(filetypes = Files, defaultextension = Files)
+            with savefile as f:
+                f.write("source,set-type,element,ox.,a1,b1,a2,b2,a3,b3,a4,b4,a5,b5,c,comment\n")
+                f.write("ITC,9,H,0,0.489918,20.6593,0.262003,7.74039,0.196767,49.5519,0.049879,2.20159,,,0.001305,This is an example\n")
+    
+        
+        
+        
     
     def build_rest(self, filename):
         for widget in self.root.winfo_children():
             widget.destroy()
         self.frame_selection_buttons()
+        self.frame_about_button()
         self.open_button()
         self.filename = filename
         self.data = data(filename,self.root)
@@ -354,7 +372,7 @@ SOFTWARE.
             
             
             if setting == "reset":
-                self._search_button = ttk.Button(self._frame_buttons,
+                self._search_button = tk.Button(self._frame_buttons,bg="#FFAAAA",
                            command = lambda: refresh(setting))
             else:
                 self._search_button = ttk.Button(self._frame_search,
@@ -471,7 +489,7 @@ SOFTWARE.
             self._scrbar.pack(side=tk.LEFT, fill=tk.Y)
         
         def use_selection():
-            self._apply_button = ttk.Button(self._frame_buttons,
+            self._apply_button = tk.Button(self._frame_buttons,bg="#AAFFAA",
                            command = lambda: items_selected())
             self._apply_button["text"] = "Plot Selected"
             self._apply_button.pack(side=tk.LEFT,expand=True)
@@ -522,11 +540,15 @@ class plot_window:
         self.keys = keys
         self.data = data
         
+        self.dpi_default = 100
+        self.dpi_set = str(self.dpi_default)
+        
         self.mode = "theta"
         self.lambda_default = 0.709319
         self.lambda_set = str(self.lambda_default)
         
         self.draw_window()
+        self._entry_mode_dpi.insert(tk.END, self.dpi_set)
         self._entry_mode_theta.insert(tk.END, self.lambda_set)
         
     def draw_window(self):
@@ -550,19 +572,16 @@ class plot_window:
     def buttons_frame(self):
         self._frame_buttons = tk.Frame(self.root)
         self._frame_buttons.pack(side=tk.TOP,fill=tk.X)
-        sep = ttk.Separator(self._frame_buttons,orient='horizontal')
+        self._frame_buttons_save = tk.Frame(self.root)
+        self._frame_buttons_save.pack(side=tk.TOP,fill=tk.X)
+        sep = ttk.Separator(self._frame_buttons_save,orient='horizontal')
         sep.pack(side=tk.BOTTOM,fill=tk.X)
         
         
         def buttons():
         
-            self._button_mode_q = ttk.Button(self._frame_buttons,
-                           command = lambda: self.mode_switch("q"))
-            self._button_mode_q["text"] = "Calculate for x in q [1/Å]"
-            self._button_mode_q.pack(side=tk.LEFT)    
-        
             self._label_mode_theta = ttk.Label(self._frame_buttons)
-            self._label_mode_theta["text"] = "Characteristic Wavelength [Å]:"
+            self._label_mode_theta["text"] = "Characteristic Wavelength [Å] for 2θ:"
             self._label_mode_theta.pack(side=tk.LEFT)
             
             self.angle = tk.StringVar()
@@ -578,38 +597,121 @@ class plot_window:
             self._button_mode_theta["text"] = "Calculate for x in 2θ [°]"
             self._button_mode_theta.pack(side=tk.LEFT)
             
+            self._button_mode_q = ttk.Button(self._frame_buttons,
+                           command = lambda: self.mode_switch("q"))
+            self._button_mode_q["text"] = "Calculate for x in Q [1/Å]"
+            self._button_mode_q.pack(side=tk.LEFT)   
+            
             def save_file():
                 Files = [('CSV File', '*.csv'),
                     ('All Files', '*.*')]
                 self.savefile = fd.asksaveasfile(filetypes = Files, defaultextension = Files)
                 with self.savefile as f:
                     if self.mode == "q":
-                        f.write("q/[1/Å]")
+                        f.write("Q/[1/Å]")
                     elif self.mode == "theta":
                         f.write("2theta/[°]")
                     for key in self.keys:
-                        f.write(" "+self.labels(key,"short"))
+                        f.write(","+self.labels(key,"short"))
                     f.write("\n")
                     for i in range(len(self.x_save)):
                         if self.x_save[i] < 180.0:
                             f.write("{:6.3f}".format(self.x_save[i]))
                             for j in range(len(self.y_save)):
-                                f.write(" {:8.4f}".format(self.y_save[j][i]))
+                                f.write(",{:8.4f}".format(self.y_save[j][i]))
                             f.write("\n")
             
+            
+            self._button_save_values = ttk.Button(self._frame_buttons_save, text = 'Save Plot Data', command = lambda : save_file())
+            self._button_save_values.pack(side=tk.LEFT)
+            
+            self._button_save_plot = ttk.Button(self._frame_buttons_save, text = 'Save Plot Image', command = lambda : save_plot())
+            self._button_save_plot.pack(side=tk.LEFT)
+
+            self._label_mode_dpi_1 = ttk.Label(self._frame_buttons_save)
+            self._label_mode_dpi_1["text"] = "as high quality PNG with "
+            self._label_mode_dpi_1.pack(side=tk.LEFT)
+            
+            self.dpi = tk.StringVar()
+            self._entry_mode_dpi = ttk.Entry(
+                self._frame_buttons_save,
+                textvariable=self.dpi
+            )
+            self._entry_mode_dpi.pack(side=tk.LEFT)
+            
+            self._label_mode_dpi_2 = ttk.Label(self._frame_buttons_save)
+            self._label_mode_dpi_2["text"] = "dpi."
+            self._label_mode_dpi_2.pack(side=tk.LEFT)
+            
             def save_plot():
+                try:
+                    float(self._entry_mode_dpi.get())
+                    self.dpi_set = self._entry_mode_dpi.get()
+                except:
+                    messagebox.showerror("Input Error", "Only numbers are valid inputs.")
+                    self.dpi_set = self.dpi_default
+                
+                for widget in self.root.winfo_children():
+                    widget.destroy()
+                self.draw_window()
+                self._entry_mode_dpi.insert(tk.END, self.dpi_set)
+                
                 Files = [("PNG File", '*.png'),
-                         ("SVG File", "*.svg"),
-                         ("EPS File", "*.eps"),
                     ('All Files', '*.*')]
                 filename = fd.asksaveasfilename(filetypes = Files, defaultextension = Files)
                 format_type = filename.split(".")[-1]
-                self.fig.savefig(filename, format=format_type,bbox_inches="tight",dpi=300)
+                self.fig.savefig(filename, format=format_type,bbox_inches="tight",dpi=float(self.dpi_set))
             
-            self._button_save_values = ttk.Button(self._frame_buttons, text = 'Save Data', command = lambda : save_file())
-            self._button_save_values.pack(side=tk.LEFT)
-            self._button_save_plot = ttk.Button(self._frame_buttons, text = 'Save Plot', command = lambda : save_plot())
-            self._button_save_plot.pack(side=tk.LEFT)
+            
+            math_button = ttk.Button(
+                self._frame_buttons_save,
+                text='About',
+                command = lambda: about()
+            )
+        
+            math_button.pack(side=tk.RIGHT,expand=False)
+            
+            def about():
+                about = create_window("650x400+120+120", "About the formulae")
+                about.config(bg='#AAAAAA')
+                
+                message ='''The plots for the atomic form factors were obtained using formulae (1) and (2).
+Forumla (1) describes the relationship between the scattering vector Q and the form factor f(Q), based on a sum of Gaussian functions constructed using tabulated values for a and b, after which a general shift c is applied.
+The set size is depends on the reference and usually is 4 or 5.
+
+Formula (2) describes the relationship between the scattering vector Q, the characteristic wavelength λ, and the scattering angle 2θ.    
+    '''
+                
+                text_box = tk.Text(
+                    about,
+                    wrap="word",
+                    height=10
+                )
+                text_box.pack(expand=False,fill=tk.X)
+                text_box.insert('end', message)
+                text_box.config(state='disabled')
+                
+                mainframe = tk.Frame(about)
+                mainframe.pack(expand=True,fill=tk.X)
+                              
+                fig = mpl.figure.Figure() #figsize=(3,3), dpi=100)
+                ax = fig.add_subplot(111)
+                
+                canvas = FigureCanvasTkAgg(fig, master = mainframe)
+                canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+                canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+                
+                ax.get_xaxis().set_visible(False)
+                ax.get_yaxis().set_visible(False)
+                                                
+                formula_fq = r"(1) $f(Q) = \sum_{i=1}^{\mathrm{setsize}} \left(a_i e^{-b_i \left(Q/4\pi\right)^2}\right) + c$"
+                formula_2theta = r"$(2)  2 \theta = 2 \mathrm{arcsin}\left(\frac{Q\lambda}{4\pi}\right)$"
+            
+                ax.clear()
+                ax.text(0.05, 0.7, formula_fq, fontsize=20)  
+                ax.text(0.05, 0.2, formula_2theta, fontsize=20)  
+                
+                canvas.draw()      
             
                 
         buttons()
@@ -651,14 +753,26 @@ class plot_window:
                      dpi = 100) 
         
         # adding the subplot 
-        ax = self.fig.add_subplot()         
+        if len(self.keys) > 1:
+            axs = self.fig.subplots(2,sharex=True,height_ratios=(3,1))   
+        else:
+            axs = []
+            axs.append(self.fig.subplots(1))
+          
         self.y_save = []
+        
+        # colormap
+        cmap = mpl.cm.tab10
+        
+        
         
         if self.mode == "q":
             x_base = np.linspace(0,25,num=251)
         elif self.mode == "theta":
             x_base = np.linspace(0,25,num=1001)
+        cpicker = -1
         for key in self.keys:
+            cpicker += 1
             self.x_save = []
             x = []
             y = []
@@ -670,35 +784,54 @@ class plot_window:
                     tmp += self.data.a_list[key][ii] * math.exp(-self.data.b_list[key][ii] * (i/(4*math.pi))**2)
                 tmp += self.data.c_list[key]
                 
-                y.append(tmp)
                 
                 if self.mode == "theta":
                     lambda_wl = float(self.lambda_set)
-
-                    value = i * 90.0 * lambda_wl/math.pi
-                    x.append(value)
-                    self.x_save.append(value)
+                    asin_content = i * lambda_wl/(4*math.pi)
+                    
+                    if abs(asin_content) < 0.99:
+                        value = math.asin(asin_content) * 360/math.pi
+                    
+                        x.append(value)
+                        y.append(tmp)
+                        self.x_save.append(value)
                 else:
                     x.append(i)
+                    y.append(tmp)
                     self.x_save.append(i)
             
             
         
-            ax.plot(x, y, label=self.labels(key,"long"))
+            axs[0].plot(x, y, label=self.labels(key,"long"),color=cmap(cpicker/10))
             self.y_save.append(y)
-
+        
         
         #determine title and labels
-        ax.set_ylabel("f(q)")
-        ax.set_title("Atomic Form Factors")
-        if self.mode == "q":
-            ax.set_xlabel("q [1/Å]")
+        axs[0].set_ylabel("f(Q)")
+        axs[0].set_title("Atomic Form Factors")
+        axs[0].grid(zorder=-50,linestyle="--",alpha=0.5)
+        if self.mode == "Q":
+            axs[0].set_xlabel("Q [1/Å]")
         elif self.mode == "theta":
-            ax.set_xlabel("2θ [°]")
-            ax.set_xlim([0,180])
+            axs[0].set_xlabel("2θ [°]")
+            axs[0].set_xlim([0,165])
         
-        ax.legend()
-      
+        axs[0].legend()
+        
+        
+        if len(self.keys) > 1:
+            cpicker = -1
+            axs[1].set_ylabel("Δf(Q)")
+            for i in range(0,len(self.keys)):
+                cpicker += 1
+                delta_y = []
+                for j in range(len(self.y_save[i])):
+                    delta_y.append(self.y_save[i][j]-self.y_save[0][j])
+                label = ""
+                axs[1].plot(self.x_save, delta_y,label=label,color=cmap(cpicker/10))
+            axs[1].set_xlim(axs[0].get_xlim())
+            axs[1].grid(zorder=-50,linestyle="--",alpha=0.5)
+            # axs[1].legend()
             
         # creating the Tkinter canvas 
         # containing the Matplotlib figure 
@@ -789,6 +922,10 @@ def create_window(dimensions="500x350+100+100", title = "Tkinter Hello World", i
 if __name__ == "__main__":
     
     mpl.use("TkAgg")
+    mpl.use("pgf")
+    mpl.use("pdf")
+    mpl.use("ps")
+    mpl.use("svg")
     
     search = search_window()
     
