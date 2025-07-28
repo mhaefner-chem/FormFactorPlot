@@ -918,7 +918,7 @@ def create_window(dimensions="500x350+100+100", title = "Tkinter Hello World", i
 if __name__ == "__main__":
     
     # matplotlib backend hooks for pyinstaller
-    mpl.use("TkAgg")
+    # mpl.use("TkAgg")
     mpl.use("pgf")
     mpl.use("pdf")
     mpl.use("ps")
